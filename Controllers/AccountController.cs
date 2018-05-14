@@ -19,6 +19,9 @@ using mchne_api.Auth;
 using System;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Options;
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 
 namespace mchne_api.Controllers
 {
@@ -123,7 +126,36 @@ namespace mchne_api.Controllers
             user.AvatarUrl = imageUrl;
             await _appDbContext.SaveChangesAsync();            
             return new OkObjectResult(user.AvatarUrl);            
-        }        
+        }  
+
+
+        public async Task<IActionResult> AllAvatars()
+        {
+            using(var client = new HttpClient()){
+                var url = new Uri(_configuration.GetSection("CloudAccess").GetSection("api_url").Value);                
+
+                client.DefaultRequestHeaders.Authorization = 
+                    new AuthenticationHeaderValue(
+                        "Basic", 
+                        Convert.ToBase64String(
+                            System.Text.ASCIIEncoding.ASCII.GetBytes(
+                                string.Format("{0}:{1}", 
+                                _configuration.GetSection("CloudAccess").GetSection("api_key").Value, 
+                                _configuration.GetSection("CloudAccess").GetSection("api_secret").Value))));
+
+
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string json;
+                using (var content = response.Content)
+                {
+                    json = await content.ReadAsStringAsync();
+                }
+                return new OkObjectResult(json);                
+            }
+            
+        }
+             
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
