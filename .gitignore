@@ -43,4 +43,4 @@ Thumbs.db
 
 # DB and API sensitive data #
 #############################
-appsettings.json
+#appsettings.json
