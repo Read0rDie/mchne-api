@@ -8,6 +8,6 @@ namespace mchne_api.Models
     {    
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string alias { get; set; }   
+    public string alias { get; set; }    
     }
 }

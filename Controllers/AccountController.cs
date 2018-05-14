@@ -92,6 +92,39 @@ namespace mchne_api.Controllers
             return new OkObjectResult("Account created");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAvatar(string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var identity =  await _userManager.FindByEmailAsync(email);
+            if (identity == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }                      
+            var user = _appDbContext.Users.First(u => u.Identity.Email.Equals(email));
+            return new OkObjectResult(user.AvatarUrl);            
+        }
+
+        public async Task<IActionResult> ChangeAvatar(string email, string imageUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var identity =  await _userManager.FindByEmailAsync(email);
+            if (identity == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }                      
+            var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));
+            user.AvatarUrl = imageUrl;
+            await _appDbContext.SaveChangesAsync();            
+            return new OkObjectResult(user.AvatarUrl);            
+        }        
+
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
