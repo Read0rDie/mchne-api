@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 
 namespace mchne_api.Data
@@ -46,7 +47,12 @@ namespace mchne_api.Data
             context.SaveChanges();            
         }
 
-        public static void InitializeSuperUser(ApplicationDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public static void InitializeSuperUser(
+            ApplicationDbContext context, 
+            UserManager<AppUser> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            IMapper mapper, 
+            IConfiguration config)
         {            
             if (!roleManager.RoleExistsAsync("Admin").Result)
             {
@@ -72,9 +78,12 @@ namespace mchne_api.Data
                 CreateAsync(role).Result;
             }
 
-            if (userManager.FindByEmailAsync("adydd11@gmail.com").Result == null)
+            if (userManager.FindByEmailAsync(config.GetSection("Admin").GetSection("email").Value).Result == null)
             {
-                RegistrationViewModel model = new RegistrationViewModel{Email="adydd11@gmail.com",Password="Nirvash1!",Username="anubis56"};
+                RegistrationViewModel model = new RegistrationViewModel{
+                    Email = config.GetSection("Admin").GetSection("email").Value,
+                    Password = config.GetSection("Admin").GetSection("password").Value,
+                    Username = config.GetSection("Admin").GetSection("username").Value};
                 var userIdentity = mapper.Map<AppUser>(model);
                 IdentityResult result = userManager.CreateAsync(userIdentity, model.Password).Result;
                 if (result.Succeeded)
