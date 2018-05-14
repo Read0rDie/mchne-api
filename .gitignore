@@ -38,9 +38,9 @@ Thumbs.db
 
 # VS Code generated files #
 ###########################
-vscode/***
-bin/***
+**/vscode/***
+**/bin/***
 
 # DB and API sensitive data #
 #############################
-appsettings.json
+**/appsettings.json
