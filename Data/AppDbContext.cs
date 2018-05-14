@@ -11,6 +11,6 @@ namespace mchne_api.Data
                 : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
+        public new DbSet<User> Users { get; set; }
     }
 }
