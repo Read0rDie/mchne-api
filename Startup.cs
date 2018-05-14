@@ -120,14 +120,15 @@ namespace mchne_api
             UserManager<AppUser> userManager, 
             RoleManager<IdentityRole> roleManager, 
             ApplicationDbContext appContext,
-            IMapper mapper)
+            IMapper mapper,
+            IConfiguration config)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }        
 
-            DbInitializer.InitializeSuperUser(appContext, userManager, roleManager, mapper);
+            DbInitializer.InitializeSuperUser(appContext, userManager, roleManager, mapper, config);
 
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
