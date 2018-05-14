@@ -40,3 +40,7 @@ Thumbs.db
 ###########################
 vscode/***
 bin/***
+
+# DB and API sensitive data #
+#############################
+appsettings.json
