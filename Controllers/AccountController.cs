@@ -108,7 +108,7 @@ namespace mchne_api.Controllers
                 return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
             }                      
             var user = _appDbContext.Users.First(u => u.Identity.Email.Equals(email));
-            return new OkObjectResult(user.AvatarUrl);            
+            return new OkObjectResult(user);            
         }
 
         public async Task<IActionResult> ChangeAvatar(string email, string imageUrl)
