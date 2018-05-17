@@ -155,7 +155,7 @@ namespace mchne_api.Controllers
             
         }
 
-        public async Task<IActionResult> UserName(string email)
+        public async Task<IActionResult> User(string email)
         {
             if (!ModelState.IsValid)
             {
@@ -167,7 +167,7 @@ namespace mchne_api.Controllers
                 return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
             }                      
             var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));                       
-            return new OkObjectResult(user.Identity.alias);            
+            return new OkObjectResult(user);            
         }
 
         public async Task<IActionResult> EditUserName(string email, string username)
