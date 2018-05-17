@@ -154,7 +154,38 @@ namespace mchne_api.Controllers
             }
             
         }
-             
+
+        public async Task<IActionResult> UserName(string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var identity =  await _userManager.FindByEmailAsync(email);
+            if (identity == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }                      
+            var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));                       
+            return new OkObjectResult(user.Identity.alias);            
+        }
+
+        public async Task<IActionResult> EditUserName(string email, string username)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var identity =  await _userManager.FindByEmailAsync(email);
+            if (identity == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }                      
+            var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));
+            user.Identity.alias = username;
+            await _appDbContext.SaveChangesAsync();            
+            return new OkObjectResult(user.Identity.alias);            
+        }             
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
