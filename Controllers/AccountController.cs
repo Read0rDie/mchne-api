@@ -22,7 +22,6 @@ using Microsoft.Extensions.Options;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-
 namespace mchne_api.Controllers
 {
     [Route("api/[controller]/[action]")]
