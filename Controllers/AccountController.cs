@@ -93,7 +93,7 @@ namespace mchne_api.Controllers
             
             return new OkObjectResult("Account created");
         }
-        
+
         public async Task<IActionResult> UserData(string email)
         {
             if (!ModelState.IsValid)
@@ -109,7 +109,7 @@ namespace mchne_api.Controllers
             return new OkObjectResult(user);            
         }
 
-        public async Task<IActionResult> EditUserName(string email, string username)
+        public async Task<IActionResult> Edit(string email, string newEmail, string username)
         {
             if (!ModelState.IsValid)
             {
@@ -119,11 +119,17 @@ namespace mchne_api.Controllers
             if (identity == null)
             {
                 return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
-            }                      
-            var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));
-            user.Identity.alias = username;
-            await _appDbContext.SaveChangesAsync();            
-            return new OkObjectResult(user.Identity.alias);            
+            }
+            var user = await _userManager.FindByEmailAsync(email);            
+            if(user.alias != username){
+                user.alias = username;
+            }
+            if(user.Email != newEmail || user.UserName != newEmail){
+                user.Email = newEmail;
+                user.UserName = newEmail;
+            }
+            await _userManager.UpdateAsync(user);                        
+            return new OkObjectResult("User profile updated");            
         }             
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
