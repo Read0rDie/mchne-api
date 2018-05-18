@@ -93,68 +93,7 @@ namespace mchne_api.Controllers
             
             return new OkObjectResult("Account created");
         }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAvatar(string email)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var identity =  await _userManager.FindByEmailAsync(email);
-            if (identity == null)
-            {
-                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
-            }                      
-            var user = _appDbContext.Users.First(u => u.Identity.Email.Equals(email));
-            return new OkObjectResult(user);            
-        }
-
-        public async Task<IActionResult> ChangeAvatar(string email, string imageUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var identity =  await _userManager.FindByEmailAsync(email);
-            if (identity == null)
-            {
-                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
-            }                      
-            var user = _appDbContext.Users.First(u => u.Identity.Equals(identity));
-            user.AvatarUrl = imageUrl;
-            await _appDbContext.SaveChangesAsync();            
-            return new OkObjectResult(user.AvatarUrl);            
-        }  
-
-
-        public async Task<IActionResult> AllAvatars()
-        {
-            using(var client = new HttpClient()){
-                var url = new Uri(_configuration.GetSection("CloudAccess").GetSection("api_url").Value);                
-
-                client.DefaultRequestHeaders.Authorization = 
-                    new AuthenticationHeaderValue(
-                        "Basic", 
-                        Convert.ToBase64String(
-                            System.Text.ASCIIEncoding.ASCII.GetBytes(
-                                string.Format("{0}:{1}", 
-                                _configuration.GetSection("CloudAccess").GetSection("api_key").Value, 
-                                _configuration.GetSection("CloudAccess").GetSection("api_secret").Value))));
-
-
-                var response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-                string json;
-                using (var content = response.Content)
-                {
-                    json = await content.ReadAsStringAsync();
-                }
-                return new OkObjectResult(json);                
-            }
-            
-        }
-
+        
         public async Task<IActionResult> UserData(string email)
         {
             if (!ModelState.IsValid)
