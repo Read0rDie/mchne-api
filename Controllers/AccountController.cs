@@ -155,7 +155,7 @@ namespace mchne_api.Controllers
             
         }
 
-        public async Task<IActionResult> User(string email)
+        public async Task<IActionResult> UserData(string email)
         {
             if (!ModelState.IsValid)
             {
