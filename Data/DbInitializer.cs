@@ -88,7 +88,9 @@ namespace mchne_api.Data
                 IdentityResult result = userManager.CreateAsync(userIdentity, model.Password).Result;
                 if (result.Succeeded)
                 {
-                    context.Users.AddAsync(new User { IdentityId = userIdentity.Id}).Wait();
+                    context.Users.AddAsync(new User { 
+                        IdentityId = userIdentity.Id, 
+                        AvatarUrl = config.GetSection("Default").GetSection("avatar_url").Value}).Wait();
                     userManager.AddToRoleAsync(userIdentity,  "Admin").Wait();
                     context.SaveChangesAsync();
                 }

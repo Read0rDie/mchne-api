@@ -86,7 +86,9 @@ namespace mchne_api.Controllers
 
             if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
 
-            await _appDbContext.Users.AddAsync(new User { IdentityId = userIdentity.Id});
+            await _appDbContext.Users.AddAsync(new User { 
+                IdentityId = userIdentity.Id, 
+                AvatarUrl = _configuration.GetSection("Default").GetSection("avatar_url").Value});
             await _userManager.AddToRoleAsync(userIdentity,  "User");
             await _appDbContext.SaveChangesAsync();
 
