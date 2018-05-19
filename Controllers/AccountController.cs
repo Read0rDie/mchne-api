@@ -96,6 +96,30 @@ namespace mchne_api.Controllers
             return new OkObjectResult("Account created");
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Password([FromBody]PasswordViewModel model){
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user =  await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }
+            if(await _userManager.CheckPasswordAsync(user, model.OldPassword)){
+                if(model.OldPassword == model.NewPassword){
+                    return BadRequest(Errors.AddErrorToModelState("user_search_failure", "New password cannot match old password", ModelState));
+                }
+                await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                await _appDbContext.SaveChangesAsync();
+                return new OkObjectResult("Password Updated");
+            }
+            else{
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Old password is invalid", ModelState));
+            }
+        }
+
         public async Task<IActionResult> UserData(string email)
         {
             if (!ModelState.IsValid)
@@ -117,12 +141,11 @@ namespace mchne_api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var identity =  await _userManager.FindByEmailAsync(email);
-            if (identity == null)
+            var user =  await _userManager.FindByEmailAsync(email);
+            if (user == null)
             {
                 return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
             }
-            var user = await _userManager.FindByEmailAsync(email);            
             if(user.alias != username){
                 user.alias = username;
             }
