@@ -4,5 +4,5 @@ This project was generated with [ASP.NET Core](http://github.com/aspnet/Home) ve
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:5050/`. The app will need to be reloaded if you change any of the source files for those chose to come in effect.
+Run `dotnet run` for a dev server. Navigate to `http://localhost:5050/`. The app will need to be reloaded if you change any of the source files for those chose to come in effect.
 
