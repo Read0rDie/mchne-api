@@ -1,6 +1,6 @@
 # MchneAPI
 
-This project was generated with [ASP.NET Core](github.com/aspnet/Home) version 2.1.200.
+This project was generated with [ASP.NET Core](http://github.com/aspnet/Home) version 2.1.200.
 
 ## Development server
 
