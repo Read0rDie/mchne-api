@@ -120,6 +120,28 @@ namespace mchne_api.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody]DeleteAccountViewModel model){
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user =  await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
+            }
+            if(await _userManager.CheckPasswordAsync(user, model.Password)){                
+                await _userManager.DeleteAsync(user);
+                await _appDbContext.SaveChangesAsync();
+                return new OkObjectResult("Account Deleted");
+            }
+            else{
+                return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Password is invalid", ModelState));
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> UserData(string email)
         {
             if (!ModelState.IsValid)
