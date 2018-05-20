@@ -121,7 +121,7 @@ namespace mchne_api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromBody]DeleteAccountViewModel model){
+        public async Task<IActionResult> Deletes([FromBody]DeleteAccountViewModel model){
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -131,7 +131,9 @@ namespace mchne_api.Controllers
             {
                 return BadRequest(Errors.AddErrorToModelState("user_search_failure", "Could not find user in database.", ModelState));
             }
-            if(await _userManager.CheckPasswordAsync(user, model.Password)){                
+            if(await _userManager.CheckPasswordAsync(user, model.Password)){  
+                var temp = _appDbContext.Users.First(u => u.Identity.Email.Equals(model.Email));
+                _appDbContext.Users.Remove(temp);
                 await _userManager.DeleteAsync(user);
                 await _appDbContext.SaveChangesAsync();
                 return new OkObjectResult("Account Deleted");
