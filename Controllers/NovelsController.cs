@@ -19,9 +19,9 @@ namespace mchne_api.Controllers
         }
 
         [HttpGet]
-        public List<Novel> GetAll()
+        public IActionResult GetAll()
         {
-            return _context.Novels.ToList();
+            return new OkObjectResult(_context.Novels.ToList());
         }
 
         [HttpGet("{id}", Name = "GetNovel")]
