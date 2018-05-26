@@ -8,7 +8,8 @@ namespace mchne_api.Models
         public long NovelID { get; set; }
         public string Title { get; set; }
         public string CoverImage { get; set; }
-        //public ICollection<Genre> Genres { get; set; }
+        public string Synopsis { get; set; }        
+        public string[] Genres { get; set;}
 
     }
 

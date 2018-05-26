@@ -8,13 +8,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace mchne_api.Migrations.ApplicationDb
+namespace mchne_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180511222928_users")]
-    partial class users
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,6 +80,8 @@ namespace mchne_api.Migrations.ApplicationDb
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AvatarUrl");
 
                     b.Property<string>("Gender");
 

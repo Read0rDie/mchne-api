@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
-namespace mchne_api.Migrations.ApplicationDb
+namespace mchne_api.Migrations
 {
-    public partial class users : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -163,6 +163,7 @@ namespace mchne_api.Migrations.ApplicationDb
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    AvatarUrl = table.Column<string>(nullable: true),
                     Gender = table.Column<string>(nullable: true),
                     IdentityId = table.Column<string>(nullable: true)
                 },

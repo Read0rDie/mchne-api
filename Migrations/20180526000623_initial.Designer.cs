@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
-namespace mchne_api.Migrations.ApplicationDb
+namespace mchne_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180514010152_avatarUrl")]
-    partial class avatarUrl
+    [Migration("20180526000623_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
